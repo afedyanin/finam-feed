@@ -6,7 +6,7 @@
     using FinamFeed.Api.Config;
     using NUnit.Framework;
 
-    [TestFixture, Explicit]
+    [TestFixture]
     public class FeedApiTests
     {
         private IApiConfiguration config;
