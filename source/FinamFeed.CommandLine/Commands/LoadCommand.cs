@@ -10,7 +10,7 @@
         {
         }
 
-        protected override async Task ProcessInternal()
+        protected override void ProcessInternal()
         {
             var symbol = this.FeedApi.Repository.GetSymbolById(this.Options.SymbolId);
             
@@ -22,7 +22,7 @@
             var sym = this.View.GetDisplaySymbolString(symbol, this.FeedApi.Repository.GetMarketsDictionary());
             this.Output.WriteLine($"symbol: [{sym}] period: {this.Options.Period} from: {this.Options.From.ToString("dd.MM.yyyy")} to: {this.Options.To.ToString("dd.MM.yyyy")} ");
 
-            var data = await this.FeedApi.LoadData(symbol, this.Options.Period, this.Options.From, this.Options.To).ConfigureAwait(false);
+            var data = this.FeedApi.LoadData(symbol, this.Options.Period, this.Options.From, this.Options.To).Result;
 
             if (string.IsNullOrWhiteSpace(data))
             {
@@ -37,9 +37,5 @@
             return base.ValidateOptions() ? this.Options.IsValid() : false;
         }
 
-        public override string GetUsage()
-        {
-            return this.Options.GetUsage();
-        }
     }
 }

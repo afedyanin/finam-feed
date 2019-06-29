@@ -9,7 +9,6 @@
     using FinamFeed.Metadata.Helpers;
     using FinamFeed.Model.Entities;
     using FinamFeed.Model.Enums;
-    using Nito.AsyncEx;
 
     public class FeedApi
     {
@@ -22,18 +21,18 @@
         {
             this.config = config;
             this.persister = new MetadataPersister(this.config.MarketsFilePath, this.config.SymbolsFilePath);
-            this.Repository = AsyncContext.Run(() => this.InitRepositorySafe());
+            this.Repository = this.InitRepositorySafe();
         }
 
-        public async Task Update()
+        public void Update()
         {
             using (var client = new HttpClient())
             {
                 var requestor = new WebRequestor(client);
                 var updater = new MetadataUpdater(requestor, config.MarketsFeedUrl, config.SymbolsFeedUrl);
 
-                var markets = await updater.LoadMarkets().ConfigureAwait(false);
-                var symbols = await updater.LoadSymbols().ConfigureAwait(false);
+                var markets = updater.LoadMarkets().Result;
+                var symbols = updater.LoadSymbols().Result;
 
                 this.persister.SaveMarkets(markets);
                 this.persister.SaveSymbols(symbols);
@@ -54,25 +53,25 @@
             }
         }
 
-        private Task<MetadataRepository> InitRepository()
+        private MetadataRepository InitRepository()
         {
             var markets = this.persister.LoadMarkets();
             var symbols = this.persister.LoadSymbols();
 
             var res = new MetadataRepository(markets, symbols);
-            return Task.FromResult(res);
+            return res;
         }
 
-        private async Task<MetadataRepository> InitRepositorySafe()
+        private MetadataRepository InitRepositorySafe()
         {
             try
             {
-                return await this.InitRepository().ConfigureAwait(false);
+                return this.InitRepository();
             }
             catch (Exception ex) when (ex is FileNotFoundException || ex is DirectoryNotFoundException)
             {
-                await this.Update().ConfigureAwait(false);
-                return await this.InitRepository().ConfigureAwait(false);
+                this.Update();
+                return this.InitRepository();
             }
         }
     }

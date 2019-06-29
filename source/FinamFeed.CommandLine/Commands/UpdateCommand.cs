@@ -1,7 +1,6 @@
 ﻿namespace FinamFeed.CommandLine.Commands
 {
     using System.IO;
-    using System.Threading.Tasks;
     using FinamFeed.CommandLine.Options;
 
     public class UpdateCommand : CommandBase<UpdateCommandOptions>
@@ -10,21 +9,16 @@
         {
         }
 
-        protected override async Task ProcessInternal()
+        protected override void ProcessInternal()
         {
             this.Output.WriteLine("Updating metadata...");
-            await this.FeedApi.Update().ConfigureAwait(false);
+            this.FeedApi.Update();
             this.Output.WriteLine("Metadata updated.");
         }
 
         public override bool ValidateOptions()
         {
             return base.ValidateOptions();
-        }
-
-        public override string GetUsage()
-        {
-            return this.Options.GetUsage();
         }
     }
 }

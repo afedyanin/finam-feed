@@ -10,7 +10,7 @@
         {
         }
 
-        protected override Task ProcessInternal()
+        protected override void ProcessInternal()
         {
             if (this.Options.Markets)
             {
@@ -22,18 +22,11 @@
                 var symbols = this.FeedApi.Repository.GetAllSymbols();
                 this.View.DisplaySymbols(symbols, this.FeedApi.Repository.GetMarketsDictionary());
             }
-
-            return Task.FromResult(0);
         }
 
         public override bool ValidateOptions()
         {
             return base.ValidateOptions() ? this.Options.IsValid() : false;
-        }
-
-        public override string GetUsage()
-        {
-            return this.Options.GetUsage();
         }
     }
 }

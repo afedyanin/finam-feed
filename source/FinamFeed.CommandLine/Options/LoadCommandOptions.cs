@@ -5,6 +5,7 @@
     using global::CommandLine;
     using global::CommandLine.Text;
 
+    [Verb("load", HelpText = "Load historical data from feed.")]
     public class LoadCommandOptions
     {
         [Option('s', "symbol", Required = true, HelpText = "SymbolId. Use 'find' command to get SymbolId.")]
@@ -18,12 +19,6 @@
 
         [Option('p', "period", Required = true, HelpText = "Period (time frame): T1, M1, M5, M10, M15, M30, H1, D1, W1, MN")]
         public Period Period { get; set; }
-
-        [HelpOption]
-        public string GetUsage()
-        {
-            return HelpText.AutoBuild(this, (HelpText current) => HelpText.DefaultParsingErrorsHandler(this, current));
-        }
 
         public bool IsValid()
         {

@@ -1,20 +1,27 @@
 ﻿namespace FinamFeed.CommandLine
 {
     using System;
-    using System.Threading.Tasks;
-    using Nito.AsyncEx;
+    using FinamFeed.CommandLine.Commands;
+    using FinamFeed.CommandLine.Options;
+    using global::CommandLine;
 
     public class Program
     {
         public static int Main(string[] args)
         {
-            return AsyncContext.Run(() => AsyncMain(args));
-        }
+            Parser.Default.ParseArguments<
+                FindCommandOptions, 
+                ListCommandOptions, 
+                LoadCommandOptions, 
+                UpdateCommandOptions>(args)
+                .MapResult(
+                (FindCommandOptions opts) => new FindCommand(opts, Console.Out, Console.Error).Process(),
+                (ListCommandOptions opts) => new ListCommand(opts, Console.Out, Console.Error).Process(),
+                (LoadCommandOptions opts) => new LoadCommand(opts, Console.Out, Console.Error).Process(),
+                (UpdateCommandOptions opts) => new UpdateCommand(opts, Console.Out, Console.Error).Process(),
 
-        public static async Task<int> AsyncMain(string[] args)
-        {
-            var processor = new FeedCommandProcessor();
-            await processor.Process(args, Console.In, Console.Out, Console.Error).ConfigureAwait(false);
+                err => 1);
+
             return 0;
         }
     }

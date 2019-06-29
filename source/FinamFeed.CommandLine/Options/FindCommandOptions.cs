@@ -1,8 +1,8 @@
 ﻿namespace FinamFeed.CommandLine.Options
 {
     using global::CommandLine;
-    using global::CommandLine.Text;
 
+    [Verb("find", HelpText = "Find symbol in metadata.")]
     public class FindCommandOptions
     {
         [Option('t', "ticker", HelpText = "Find symbol by ticker.")]
@@ -13,12 +13,6 @@
 
         [Option('s', "strict", HelpText = "Strict (exact) search.")]
         public bool Strict{ get; set; }
-
-        [HelpOption]
-        public string GetUsage()
-        {
-            return HelpText.AutoBuild(this, (HelpText current) => HelpText.DefaultParsingErrorsHandler(this, current));
-        }
 
         public bool IsValid()
         {

@@ -1,8 +1,8 @@
 ﻿namespace FinamFeed.CommandLine.Options
 {
     using global::CommandLine;
-    using global::CommandLine.Text;
 
+    [Verb("list", HelpText = "List all metadata info: markets or symbols.")]
     public class ListCommandOptions
     {
         [Option('m', "markets", HelpText = "List of all markets.")]
@@ -10,12 +10,6 @@
 
         [Option('s', "symbols", HelpText = "List of all symbols.")]
         public bool Symbols { get; set; }
-
-        [HelpOption]
-        public string GetUsage()
-        {
-            return HelpText.AutoBuild(this, (HelpText current) => HelpText.DefaultParsingErrorsHandler(this, current));
-        }
 
         public bool IsValid()
         {

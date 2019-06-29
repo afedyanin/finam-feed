@@ -23,21 +23,29 @@
             this.FeedApi = new FeedApi(new ApiConfiguration());
         }
 
-        public async Task Process()
+        public int Process()
         {
             try
             {
-                await this.ProcessInternal().ConfigureAwait(false);
+                if (this.ValidateOptions())
+                {
+                    this.ProcessInternal();
+                }
+                else
+                {
+                    this.Error.Write("Invalid command arguments. Use help <command> syntax to view command options.");
+                }
+                return 0;
             }
             catch(Exception ex)
             {
                 this.Error.WriteLine($"ERROR: {ex}");
+                return 1;
             }
         }
 
-        protected virtual Task ProcessInternal()
+        protected virtual void ProcessInternal()
         {
-            return Task.FromResult(0);
         }
 
         public virtual bool ValidateOptions()
@@ -49,11 +57,6 @@
 
             return true;
 
-        }
-
-        public virtual string GetUsage()
-        {
-            return string.Empty;
         }
     }
 }

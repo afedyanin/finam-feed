@@ -18,10 +18,10 @@
         }
 
         [Test]
-        public async Task CanUpdateMetadata()
+        public void CanUpdateMetadata()
         {
             var feedApi = new FeedApi(this.config);
-            await feedApi.Update().ConfigureAwait(false);
+            feedApi.Update();
 
             Assert.True(IsFileExists(this.config.MarketsFilePath));
             Assert.True(IsFileExists(this.config.SymbolsFilePath));

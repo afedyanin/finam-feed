@@ -1,14 +1,9 @@
-﻿namespace FinamFeed.CommandLine.Options
-{
-    using global::CommandLine;
-    using global::CommandLine.Text;
+﻿using CommandLine;
 
+namespace FinamFeed.CommandLine.Options
+{
+    [Verb("update", HelpText = "Update metadata info from web.")]
     public class UpdateCommandOptions
     {
-        [HelpOption]
-        public string GetUsage()
-        {
-            return HelpText.AutoBuild(this, (HelpText current) => HelpText.DefaultParsingErrorsHandler(this, current));
-        }
     }
 }
